@@ -12,9 +12,9 @@ app.use(bodyParser.json());
 
 app.use(require('./middleware/headers'));
 
-app.use(require('./middleware/validate-session'));
-
 app.use('/user', user);
+
+app.use(require('./middleware/validate-session'));
 
 app.listen(3000, () => {
     console.log('heard on 3000')
