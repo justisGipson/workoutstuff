@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { AuthContext } from '../auth/AuthContext';
 
 
 class WorkoutCreate extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            id: '',
             result: '',
             description: '',
             definition: ''
@@ -26,14 +26,13 @@ class WorkoutCreate extends Component {
             body: JSON.stringify({ log: this.state }),
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': this.props.token
+                'Authorization': this.props.auth.token
             })
         })
             .then((res) => res.json())
             .then((logData) => {
                 this.props.updateWorkoutsArray()
                 this.setState({
-                    id: '',
                     result: '',
                     description: '',
                     definition: ''
@@ -72,4 +71,8 @@ class WorkoutCreate extends Component {
     }
 }
 
-export default WorkoutCreate;
+export default props => (
+    <AuthContext.Consumer>
+        {auth => <WorkoutCreate{...props} auth={auth} />}
+    </AuthContext.Consumer>
+);

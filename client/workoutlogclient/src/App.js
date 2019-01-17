@@ -2,20 +2,26 @@ import React, { Component } from 'react';
 import './App.css';
 import SiteBar from './home/Navbar';
 import Auth from './auth/Auth';
-import Splash from './home/Splash';
+import WorkoutIndex from './workouts/WorkoutIndex';
 
 import {
   BrowserRouter as Router,
   Route,
   Switch
 } from 'react-router-dom';
+import { AuthContext } from './auth/AuthContext';
 
 
 class App extends Component {
   constructor() {
     super();
+    this.setToken = (token) => {
+      localStorage.setItem('token', token);
+      this.setState({sessionToken: token})
+    }
     this.state = {
-      sessionToken: ''
+      sessionToken: '',
+      setToken: this.setToken
     }
   }
 
@@ -43,14 +49,14 @@ class App extends Component {
       return (
         <Switch>
           <Route path='/' exact>
-            <Splash sessionToken={this.state.sessionToken} />
+            <WorkoutIndex />
           </Route>
         </Switch>
       )
     } else {
       return (
         <Route path="/auth" >
-          <Auth setToken={this.setSessionState}/>
+          <Auth />
         </Route>
       )
     }
@@ -59,10 +65,12 @@ class App extends Component {
   render(){
     return(
       <Router>
+        <AuthContext.Provider value={this.state}>
         <div>
           <SiteBar clickLogout={this.logout}/>
           {this.protectedViews()}
         </div>
+        </AuthContext.Provider>
       </Router>
     );
   }

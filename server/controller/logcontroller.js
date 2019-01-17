@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     var data = req.params.id;
-    var userid =req.user.id;
+    var userid = req.user.id;
 
     LogModel.findOne({
         where: {id: data, owner: userid}

@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import WorkoutCreate from './WorkoutCreate';
 import WorkoutsTable from './WorkoutTable';
 import WorkoutEdit from './WorkoutEdit';
+import { AuthContext } from '../auth/AuthContext';
 
 
 class WorkoutIndex extends Component{
@@ -24,7 +25,7 @@ class WorkoutIndex extends Component{
             method: 'GET',
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': this.props.token
+                'Authorization': this.props.auth.token
             })
         })
         .then((res) => res.json())
@@ -39,7 +40,7 @@ class WorkoutIndex extends Component{
           body: JSON.stringify({ log: { id: event.target.id } }),
           headers: new Headers({
             'Content-Type': 'application/json',
-            'Authorization': this.props.token
+            'Authorization': this.props.auth.token
           })
         })
         .then((res) => this.fetchWorkouts())
@@ -51,7 +52,7 @@ class WorkoutIndex extends Component{
             body: JSON.stringify({log: workout}),
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': this.props.token
+                'Authorization': this.props.auth.token
             })
         })
         .then((res) => {
@@ -92,4 +93,8 @@ class WorkoutIndex extends Component{
     }
 }
 
-export default WorkoutIndex;
+export default props => (
+    <AuthContext.Consumer>
+        {auth => <WorkoutIndex{...props} auth={auth} />}
+    </AuthContext.Consumer>
+);
